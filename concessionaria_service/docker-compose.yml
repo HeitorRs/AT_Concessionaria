@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  eureka-server:
+    image: eurekaserver:latest
+    container_name: eurekaserver
+    build:
+      context: ../eureka
+      dockerfile: ../eureka/Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - eureka-net
+
+  concessionaria-service:
+    image: concessionariaservice:latest
+    build:
+      context: ../concessionaria_service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+    networks:
+      - eureka-net
+
+networks:
+  eureka-net:
+    driver: bridge
